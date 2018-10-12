@@ -2,7 +2,7 @@
 ; segments of code
 ;
 
-section _code vstart=0
+section _code
 
     ; base << 4 + offset
     jmp 0x90:start
@@ -17,11 +17,11 @@ section _code vstart=0
     mov ds, ax                  ; data-section base
 
     ; initializing stack
-    mov ax, section._seack.stask_start
+    mov ax, section._stack.start
     add ax, 0x900
     shr ax, 4
     mov ss, ax
-    mov sp, stask_start
+    mov sp, stack_top
 
     ; code
     jmp $
@@ -30,12 +30,12 @@ section _code vstart=0
 
 section _data align=16 vstart=0
 
-    var1 dd 0x1
-    var2 dd 0x2
+    var1 dd 0x01234567
+    var2 dd 0x89abcdef
 
 
 section _stack align=16 vstart=0
 
     times 128 db 0              ; 128B stack
 
-    stask_start:
+    stack_top:

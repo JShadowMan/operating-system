@@ -1,0 +1,41 @@
+     1                                  ;
+     2                                  ; segments of code
+     3                                  ;
+     4                                  
+     5                                  section _code
+     6                                  
+     7                                      ; base << 4 + offset
+     8 00000000 EA[0500]9000                jmp 0x90:start
+     9                                      ; code base
+    10                                  
+    11                                      start:
+    12                                  
+    13                                      ; initializing data-section
+    14 00000005 B8[0000]                    mov ax, section._data.start
+    15 00000008 050009                      add ax, 0x900               ; _data.start + 0x900
+    16 0000000B C1E804                      shr ax, 4                   ; ax >> 4
+    17 0000000E 8ED8                        mov ds, ax                  ; data-section base
+    18                                  
+    19                                      ; initializing stack
+    20 00000010 B8[0000]                    mov ax, section._stack.start
+    21 00000013 050009                      add ax, 0x900
+    22 00000016 C1E804                      shr ax, 4
+    23 00000019 8ED0                        mov ss, ax
+    24 0000001B BC[8000]                    mov sp, stack_top
+    25                                  
+    26                                      ; code
+    27 0000001E EBFE                        jmp $
+    28                                  
+    29                                  
+    30                                  
+    31                                  section _data align=16 vstart=0
+    32                                  
+    33 00000000 67452301                    var1 dd 0x01234567
+    34 00000004 EFCDAB89                    var2 dd 0x89abcdef
+    35                                  
+    36                                  
+    37                                  section _stack align=16 vstart=0
+    38                                  
+    39 00000000 00<rept>                    times 128 db 0              ; 128B stack
+    40                                  
+    41                                      stack_top:
